@@ -3,11 +3,11 @@ import Details from "../components/details/Details";
 
 
 
-export default function HomePage(){
+export default function DetailsPage() {
   return (
-    <main className="flex h-screen">
-      <Sidebar/>
+    <div className="flex h-screen">
+      <Sidebar />
       <Details/>
-    </main>
+    </div>
   );
 }
