@@ -8,6 +8,9 @@ module.exports = {
       },
       maxWidth: {
         '128': '98rem',
+      },
+      height: {
+        '128': '38rem',
       }
     },
     fontSize: {
@@ -15,7 +18,7 @@ module.exports = {
       base: ['16px', '24px'],
       lg: ['20px', '28px'],
       xl: ['50px', '58px'],
-    }
+    },
   },
   plugins: [],
 }
