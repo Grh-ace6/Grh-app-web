@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function MainContent() {
+export default function MainContent({ closeModal }) {
   const [formData, setFormData] = useState({
     pageNum: "1",
     pagina: "1",
@@ -128,6 +128,7 @@ export default function MainContent() {
           </button>
           <button
             type="button"
+            onClick={closeModal}
             className="px-8 py-2 bg-white text-gray-700 rounded-md border border-blue-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Cancelar

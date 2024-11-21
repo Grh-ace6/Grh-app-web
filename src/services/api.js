@@ -4,7 +4,7 @@ const BASE_URL = 'http://127.0.0.1:8000';  // URL base do servidor FastAPI
 export const fetchPortarias = async (requestData) => {
   try {
     const response = await fetch(`${BASE_URL}/portarias`, {
-      method: 'POST',  // Supondo que seu endpoint use POST para envio de dados no corpo da requisição
+      method: 'POST',  
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
