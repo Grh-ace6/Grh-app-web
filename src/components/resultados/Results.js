@@ -11,8 +11,10 @@ export default function Results() {
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(formData.pageNum);
-  const [tempPageNum, setTempPageNum] = useState(''); // Valor temporario
+  const [tempPageNum, setTempPageNum] = useState(''); // Valor temporário
   const [isModalOpen, setModalOpen] = useState(false);
+  const [tempFormData, setTempFormData] = useState(initialFormData); //FormData temporário
+
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -31,30 +33,40 @@ export default function Results() {
       ...prevFormData,
       pageNum: (Math.max(parseInt(prevFormData.pageNum) - 1, 1)).toString(),
       pagina: (Math.max(parseInt(prevFormData.pagina) - 1, 1)).toString(),
+      inicio: "false",
     }));
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      // Se o valor for um número válido, atualiza o formData
+      const newPageNum = Math.min(parseInt(tempPageNum), results[0].paginas_maximo);
+      if (!isNaN(newPageNum)) {
+        setFormData({
+          ...formData,
+          pageNum: newPageNum.toString(),
+          pagina: newPageNum.toString(),
+          inicio: "false",
+        });
+      }
+    }
   };
 
   const handleInputChange = (e) => {
     setTempPageNum(e.target.value);
   };
 
-  const handleInputChangeForm = (e) => {
+  const handlePopupChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setTempFormData((prevTempFormData) => ({
+      ...prevTempFormData,
+      [name]: value,
+    }));
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      // Se o valor for um número válido, atualiza o formData
-      const newPageNum = Math.max(parseInt(tempPageNum), 1);
-      if (!isNaN(newPageNum)) {
-        setFormData({
-          ...formData,
-          pageNum: newPageNum.toString(),
-          pagina: newPageNum.toString(),
-        });
-      }
-    }
+  const handleConsultar = () => {
+    setFormData(tempFormData);
+    closeModal();
   };
 
   useEffect(() => {
@@ -66,7 +78,7 @@ export default function Results() {
           setCurrentPage(formData.pageNum); // Atualiza o número da página
         }
       } catch (err) {
-        
+        setError("Nenhum resultado foi encontrado, tente novamente!");
       }
     };
   
@@ -117,8 +129,8 @@ export default function Results() {
                     type="text"
                     id="portariaNumber"
                     name="portariaNumber"
-                    value={formData.portariaNumber}
-                    onChange={handleInputChangeForm}
+                    value={tempFormData.portariaNumber}
+                    onChange={handlePopupChange}
                     className="w-half px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Input text"
                   />
@@ -130,8 +142,8 @@ export default function Results() {
                     type="text"
                     id="portariaYear"
                     name="portariaYear"
-                    value={formData.portariaYear}
-                    onChange={handleInputChangeForm}
+                    value={tempFormData.portariaYear}
+                    onChange={handlePopupChange}
                     className="w-half px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Input text"
                   />
@@ -145,8 +157,8 @@ export default function Results() {
                     type="text"
                     id="bulletinNumber"
                     name="bulletinNumber"
-                    value={formData.bulletinNumber}
-                    onChange={handleInputChangeForm}
+                    value={tempFormData.bulletinNumber}
+                    onChange={handlePopupChange}
                     className="w-half px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Input text"
                   />
@@ -158,8 +170,8 @@ export default function Results() {
                     type="text"
                     id="bulletinYear"
                     name="bulletinYear"
-                    value={formData.bulletinYear}
-                    onChange={handleInputChangeForm}
+                    value={tempFormData.bulletinYear}
+                    onChange={handlePopupChange}
                     className="w-half px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Input text"
                   />
@@ -172,8 +184,8 @@ export default function Results() {
                   type="text"
                   id="solicitacao_assunto"
                   name="solicitacao_assunto"
-                  value={formData.solicitacao_assunto}
-                  onChange={handleInputChangeForm}
+                  value={tempFormData.solicitacao_assunto}
+                  onChange={handlePopupChange}
                   className="w-2/3 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Input text"
                 />
@@ -184,8 +196,8 @@ export default function Results() {
                   type="text"
                   id="solicitacao_informativo"
                   name="solicitacao_informativo"
-                  value={formData.solicitacao_informativo}
-                  onChange={handleInputChangeForm}
+                  value={tempFormData.solicitacao_informativo}
+                  onChange={handlePopupChange}
                   className="w-2/3 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Input text"
                 />
@@ -193,7 +205,7 @@ export default function Results() {
               <div className="flex pt-12 justify-start space-x-4">
                 <button
                   type="submit"
-                  onClick={closeModal}
+                  onClick={handleConsultar}
                   className="px-8 py-2 bg-[#0095DA] text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   Consultar

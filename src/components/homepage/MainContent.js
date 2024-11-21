@@ -18,7 +18,7 @@ export default function MainContent({ closeModal }) {
     solicitacao_informativo: "",
     data: ""
   });
-
+  
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
